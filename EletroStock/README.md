@@ -163,54 +163,6 @@ EletroStock/
 └── README.md                       # Documentação do projeto
 ```
 
----
-
-## ⚙️ Instalação e Execução
-
-### Pré-requisitos
-- [XAMPP](https://www.apachefriends.org/) (ou WampServer / LAMP) com **PHP 7.4+** ou **PHP 8.x** e **MySQL/MariaDB**.
-- Navegador web moderno (Chrome, Firefox, Edge, etc.).
-
-### Passo a Passo
-
-1. **Clonar ou copiar os arquivos para o servidor local:**
-   Coloque o diretório do projeto dentro da pasta web do seu servidor (ex: `htdocs` no XAMPP):
-   ```text
-   C:\xampp\htdocs\projetos_faculdade\EletroStock
-   ```
-
-2. **Inicializar o Apache e o MySQL:**
-   Abra o painel do XAMPP e inicie os módulos **Apache** e **MySQL**.
-
-3. **Importar o Banco de Dados:**
-   - Acesse o [phpMyAdmin](http://localhost/phpmyadmin) ou seu cliente MySQL de preferência (ex: DBeaver, MySQL Workbench).
-   - Execute o script de criação do banco:
-     ```sql
-     database/eletrostock.sql
-     ```
-   - Em seguida, execute a carga inicial de dados:
-     ```sql
-     database/eletrostock_inserts.sql
-     ```
-
-4. **Configurar as credenciais do Banco:**
-   Verifique o arquivo [EletroStock/models/Database.php](file:///c:/xampp/htdocs/projetos_faculdade/EletroStock/EletroStock/models/Database.php):
-   ```php
-   $host = '127.0.0.1';
-   $port = '3306';
-   $dbname = 'eletrostock';
-   $usuario = 'root';
-   $senha = 'sua_senha'; // Ajuste caso seu ambiente local possua senha diferente
-   ```
-
-5. **Acessar a Aplicação:**
-   Abra seu navegador e acerte a URL correspondente:
-   ```url
-   http://localhost/projetos_faculdade/EletroStock/EletroStock/
-   ```
-
----
-
 ## 🗄️ Modelagem de Dados e Integridade
 
 O banco de dados relacional foi modelado sob a engine **InnoDB**, com restrições explícitas de integridade referencial:
