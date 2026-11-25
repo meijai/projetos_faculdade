@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação EletroStock - 15 Minutos (UNOESC)</title>
+  <style>
+    :root {
+      --primary: #1A365D;
+      --secondary: #0D6EFD;
+      --accent: #0DCAF0;
+      --success: #198754;
+      --warning: #FFC107;
+      --danger: #DC3545;
+      --dark: #0F172A;
+      --light: #F8FAFC;
+      --border: #CBD5E1;
+      --code-bg: #1E293B;
+      --kw-color: #F43F5E;
+      --fn-color: #38BDF8;
+      --var-color: #FBBF24;
+      --str-color: #34D399;
+      --com-color: #94A3B8;
+      --diagram-bg: #EFF6FF;
+      --diagram-border: #93C5FD;
+      --diagram-text: #1E40AF;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--dark);
+      color: #0F172A;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Top Bar */
+    header {
+      background: #1E293B;
+      color: white;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #334155;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #38BDF8;
+    }
+    .badge-unoesc {
+      background: #334155;
+      color: #E2E8F0;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #475569;
+    }
+
+    /* Header Action Shortcuts */
+    .header-shortcuts {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-header-diagrams {
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      color: white;
+      border: 1px solid #60A5FA;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-header-diagrams:hover {
+      background: linear-gradient(135deg, #1D4ED8, #1E40AF);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Timer Controls */
+    .timer-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0F172A;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      font-family: Consolas, monospace;
+    }
+    .timer-val {
+      font-size: 15px;
+      font-weight: bold;
+      color: #38BDF8;
+      min-width: 100px;
+      text-align: center;
+    }
+    .timer-btn {
+      background: #334155;
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .timer-btn:hover {
+      background: var(--secondary);
+    }
+
+    /* Main Slide Stage */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 24px;
+      position: relative;
+    }
+    .slide-card {
+      width: 100%;
+      max-width: 1340px;
+      height: 85vh;
+      background: var(--light);
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid #E2E8F0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    .slide-card.active {
+      display: flex;
+      animation: slideIn 0.2s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      background: white;
+      padding: 12px 26px;
+      border-bottom: 2px solid #E2E8F0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slide-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .meta-pills {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .pill-speaker {
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1px solid #BFDBFE;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+    .pill-time {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* Slide Body Grid */
+    .slide-body {
+      flex: 1;
+      padding: 18px 26px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+    }
+    .slide-body.full-width {
+      grid-template-columns: 1fr;
+    }
+
+    /* Left Column Content */
+    .topic-box h3 {
+      font-size: 15px;
+      color: var(--secondary);
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .topic-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .topic-list li {
+      font-size: 14.5px;
+      line-height: 1.45;
+      position: relative;
+      padding-left: 22px;
+      color: #1E293B;
+    }
+    .topic-list li::before {
+      content: "▪";
+      position: absolute;
+      left: 6px;
+      color: var(--secondary);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .topic-list li strong {
+      color: #0F172A;
+    }
+
+    /* Right Column Evidence Box */
+    .evidence-box {
+      background: white;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      border-top: 4px solid var(--success);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      overflow-y: auto;
+    }
+    .evidence-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--success);
+    }
+    .evidence-tag.blue {
+      color: var(--secondary);
+    }
+
+    /* Diagram Reference Badges & Cards */
+    .diagram-pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--diagram-bg);
+      color: var(--diagram-text);
+      border: 1px solid var(--diagram-border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .diagram-pill-link:hover {
+      background: #DBEAFE;
+      border-color: #3B82F6;
+      color: #1D4ED8;
+      transform: translateY(-1px);
+    }
+    .diagram-visual-card {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-left: 4px solid #3B82F6;
+      border-radius: 6px;
+      padding: 9px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .diagram-visual-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #1E3A8A;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* UML & Schema Mini Renderers */
+    .uml-box {
+      background: white;
+      border: 1px solid #94A3B8;
+      border-radius: 5px;
+      font-family: Consolas, 'Fira Code', monospace;
+      font-size: 11.5px;
+      overflow: hidden;
+    }
+    .uml-header {
+      background: #E2E8F0;
+      padding: 4px 8px;
+      font-weight: bold;
+      color: #0F172A;
+      text-align: center;
+      border-bottom: 1px solid #CBD5E1;
+    }
+    .uml-header.abstract {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+    .uml-content {
+      padding: 4px 8px;
+      color: #334155;
+      line-height: 1.4;
+    }
+    .uml-content hr {
+      border: none;
+      border-top: 1px dashed #CBD5E1;
+      margin: 3px 0;
+    }
+
+    .seq-step-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      font-family: Consolas, monospace;
+    }
+    .seq-step-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    .seq-num {
+      background: #2563EB;
+      color: white;
+      font-weight: bold;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+    .seq-num.err {
+      background: #DC2626;
+    }
+
+    .concept-badge {
+      display: inline-block;
+      background: #DBEAFE;
+      color: #1E40AF;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+      border: 1px solid #BFDBFE;
+    }
+    .concept-badge.green {
+      background: #DCFCE7;
+      color: #166534;
+      border-color: #BBF7D0;
+    }
+    .concept-badge.amber {
+      background: #FEF3C7;
+      color: #92400E;
+      border-color: #FDE68A;
+    }
+    .concept-badge.red {
+      background: #FEE2E2;
+      color: #991B1B;
+      border-color: #FECACA;
+    }
+
+    /* Code Block Styling */
+    .code-box {
+      background: var(--code-bg);
+      color: #F8FAFC;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: Consolas, 'Fira Code', 'Courier New', monospace;
+      font-size: 11.5px;
+      line-height: 1.45;
+      overflow-x: auto;
+      border: 1px solid #334155;
+      white-space: pre-wrap;
+      word-break: break-word;
+      tab-size: 4;
+    }
+    .code-box .kw { color: var(--kw-color); font-weight: bold; }
+    .code-box .fn { color: var(--fn-color); }
+    .code-box .var { color: var(--var-color); }
+    .code-box .str { color: var(--str-color); }
+    .code-box .com { color: var(--com-color); font-style: italic; }
+
+    /* Alert Boxes */
+    .alert-demo {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .alert-demo.red {
+      background: #FEE2E2;
+      color: #991B1B;
+      border-left: 4px solid #DC2626;
+    }
+    .alert-demo.green {
+      background: #DCFCE7;
+      color: #166534;
+      border-left: 4px solid #16A34A;
+    }
+
+    /* Cover Slide Specifics */
+    .cover-view {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      padding: 24px;
+      gap: 14px;
+    }
+    .cover-tag {
+      background: #DBEAFE;
+      color: #1E40AF;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      border: 1px solid #BFDBFE;
+    }
+    .cover-view h1 {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .cover-view .subtitle {
+      font-size: 17px;
+      color: #475569;
+      max-width: 860px;
+      line-height: 1.5;
+    }
+    .cover-diagram-banner {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #1E40AF;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .authors-grid {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .author-card {
+      background: white;
+      border: 1px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1E293B;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .advisor-note {
+      font-size: 12.5px;
+      color: #64748B;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    /* Footer & Controls */
+    footer {
+      background: #1E293B;
+      color: white;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #334155;
+    }
+    .progress-info {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-action {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12.5px;
+      transition: background 0.15s;
+    }
+    .btn-action:hover {
+      background: #0B5ED7;
+    }
+    .btn-action:disabled {
+      background: #475569;
+      cursor: not-allowed;
+    }
+    .btn-tool {
+      background: transparent;
+      color: #94A3B8;
+      border: 1px solid #475569;
+      padding: 5px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .btn-tool:hover {
+      background: #334155;
+      color: white;
+    }
+    .btn-tool.active {
+      background: #F59E0B;
+      color: #0F172A;
+      border-color: #F59E0B;
+      font-weight: bold;
+    }
+
+    /* Drawer de Notas do Orador */
+    #notes-drawer {
+      display: none;
+      position: absolute;
+      bottom: 50px;
+      left: 24px;
+      right: 24px;
+      background: #0F172A;
+      color: #F1F5F9;
+      border: 2px solid #F59E0B;
+      border-radius: 8px;
+      padding: 14px 20px;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+      z-index: 100;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    #notes-drawer.open {
+      display: block;
+    }
+    #notes-drawer h4 {
+      color: #F59E0B;
+      font-size: 13px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    #notes-content {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #E2E8F0;
+    }
+
+    /* Modal de Diagramas Técnicos */
+    #diagrams-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #diagrams-modal.open {
+      display: flex;
+    }
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 900px;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+    }
+    .modal-header {
+      background: #1E293B;
+      color: white;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-close-btn:hover {
+      color: white;
+    }
+    .modal-body {
+      padding: 18px 22px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .diagram-item-row {
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #F8FAFC;
+      transition: all 0.15s;
+    }
+    .diagram-item-row:hover {
+      background: #EFF6FF;
+      border-color: #93C5FD;
+    }
+    .diagram-item-info h4 {
+      font-size: 14px;
+      color: #1E3A8A;
+      margin-bottom: 3px;
+    }
+    .diagram-item-info p {
+      font-size: 12px;
+      color: #64748B;
+    }
+    .btn-open-pdf {
+      background: #2563EB;
+      color: white;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .btn-open-pdf:hover {
+      background: #1D4ED8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header>
+    <div class="brand">
+      <span class="brand-title">EletroStock</span>
+      <span class="badge-unoesc">Universidade do Oeste de Santa Catarina &bull; Campus Videira &bull; Ciência da Computação</span>
+    </div>
+    <div class="header-shortcuts">
+      <button class="btn-header-diagrams" id="btn-diagrams-trigger" title="Atalho: Tecla [D]">
+        📐 Diagramas Oficiais (5)
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Canvas -->
+  <main>
+
+    <!-- SLIDE 1: CAPA -->
+    <div class="slide-card active" data-speaker="Bruno Furlan">
+      <div class="cover-view">
+        <div class="cover-tag">SEMINÁRIO INTERDISCIPLINAR &bull; ENGENHARIA DE SOFTWARE I &bull; PROGRAMAÇÃO II &bull; BANCO DE DADOS II</div>
+        <h1>EletroStock</h1>
+        <p class="subtitle">Sistema Web Orientado a Objetos para Gestão e Controle de Estoque de Materiais Elétricos</p>
+
+        <div class="authors-grid">
+          <div class="author-card">Bruno Furlan</div>
+          <div class="author-card">Higor Afonso Kleemann</div>
+          <div class="author-card">Lucas Castanheiro</div>
+          <div class="author-card">Lucas Piva Bellaver</div>
+        </div>
+
+        <p class="advisor-note">
+          <strong>Docentes Orientadores:</strong> Prof. Leandro Otavio Cordova Vieira &bull; Profª. Tatiele Bolson Moro<br>
+          Universidade do Oeste de Santa Catarina &bull; Campus Videira
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: INVESTIGAÇÃO EMPÍRICA DO PROBLEMA -->
+    <div class="slide-card" data-speaker="Bruno Furlan">
+      <div class="slide-header">
+        <h2>01. Contexto Operacional e Investigação do Problema Real</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Bruno Furlan</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Gargalos no Almoxarifado Elétrico</h3>
+          <ul class="topic-list">
+            <li><strong>Controles Manuais:</strong> Anotações em papel, pranchetas soltas e planilhas duplicadas.</li>
+            <li><strong>Ambiguidade de Nomenclatura:</strong> Grafias livres como <em>"2.5"</em>, <em>"2,5 mm"</em> e <em>"2.50"</em> duplicam materiais e confundem estoquistas.</li>
+            <li><strong>Ausência de Travas:</strong> Retiradas anotadas sem conferência de saldo real geram furos de estoque e saldos negativos no papel.</li>
+            <li><strong>Risco Crítico à NBR 5410:</strong> Entregar condutor de 1,5 mm² no lugar de 2,5 mm² superaquece o circuito por efeito Joule e causa incêndio.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">✓ Evidências de Campo (2 Técnicas Formais)</div>
+          <div>
+            <p style="font-size: 13px; font-weight: bold; color: #1E293B; margin-bottom: 4px;">Técnica 1 — Entrevistas (4 Almoxarifes / 6 Eletricistas):</p>
+            <p style="font-size: 12.5px; color: #334155;">&bull; <strong style="color: #DC2626;">83,3%</strong> dos eletricistas já receberam bitola trocada por identificação confusa.</p>
+            <p style="font-size: 12.5px; color: #334155;">&bull; <strong style="color: #DC2626;">100%</strong> dos almoxarifes admitem anotar às pressas no pico da manhã para digitar depois.</p>
+          </div>
+          <hr style="border: none; border-top: 1px dashed #CBD5E1;">
+          <div>
+            <p style="font-size: 13px; font-weight: bold; color: #1E293B; margin-bottom: 4px;">Técnica 2 — Análise Documental (50 Requisições / 15 Inventários):</p>
+            <p style="font-size: 12.5px; color: #334155;">&bull; <strong style="color: #DC2626;">19,2%</strong> de discrepância média entre prateleira física e papel.</p>
+            <p style="font-size: 12.5px; color: #334155;">&bull; <strong style="color: #DC2626;">11 registros</strong> com saldo final negativo no papel (-8 un.).</p>
+            <p style="font-size: 12.5px; color: #334155;">&bull; <strong style="color: #DC2626;">17 grafias</strong> divergentes cadastradas para a mesma seção de 2,5 mm².</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: DECLARAÇÃO FORMAL E PERSONAS -->
+    <div class="slide-card" data-speaker="Higor Kleemann">
+      <div class="slide-header">
+        <h2>02. Declaração do Problema, Personas e Necessidades</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Higor Kleemann</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Declaração Formal do Problema</h3>
+          <div style="background: #E2E8F0; padding: 10px 14px; border-radius: 6px; font-size: 12.5px; font-style: italic; color: #1E293B; margin-bottom: 12px; border-left: 3px solid var(--secondary);">
+            "O problema de falta de controle de saldo e confusão na identificação da bitola dos cabos afeta almoxarifes e eletricistas, cujo impacto é entrega de condutores incompatíveis com a NBR 5410 (risco de incêndio) e obras paradas. Uma solução bem-sucedida deve padronizar bitolas, impedir saídas sem saldo e auditar movimentações."
+          </div>
+          <h3>Personas Fundamentadas em Dados Reais</h3>
+          <ul class="topic-list">
+            <li><strong>Carlos Alberto (44 anos, Primária):</strong> Estoquista Chefe. Exige busca preditiva instantânea e trava contra saldo negativo.</li>
+            <li><strong>Mariana Souza (29 anos, Secundária):</strong> Eletricista Instaladora. Exige exatidão técnica da bitola em mm² no cadastro.</li>
+            <li><strong>Roberto Mendonça (52 anos, Gestão):</strong> Engenheiro Eletricista. Foco em auditoria, rastreabilidade e valoração do estoque.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">✓ Rastreabilidade de Necessidades (N01 a N09)</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px;">
+            <p><span class="concept-badge">N01</span> Painel com saldo e valor financeiro &rarr; <em>Carlos / Roberto</em></p>
+            <p><span class="concept-badge">N03</span> Normalização de bitolas em mm² &rarr; <em>Mariana / Carlos</em></p>
+            <p><span class="concept-badge">N05</span> Trava de exclusão de item com saldo &rarr; <em>Roberto</em></p>
+            <p><span class="concept-badge">N07</span> Bloqueio estrito de saída sem saldo &rarr; <em>Carlos</em></p>
+            <p><span class="concept-badge">N09</span> Trilha de auditoria cronológica &rarr; <em>Roberto</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: OBJETIVOS E METODOLOGIA (COM MAPA DOS 5 DIAGRAMAS) -->
+    <div class="slide-card" data-speaker="Higor Kleemann">
+      <div class="slide-header">
+        <h2>03. Objetivos do Projeto e Suíte de Modelagem</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Higor Kleemann</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Objetivo Geral</h3>
+          <p style="font-size: 14.5px; line-height: 1.45; color: #1E293B; margin-bottom: 12px;">
+            Desenvolver e validar uma aplicação web orientada a objetos no padrão arquitetural MVC em PHP 8 nativo, assegurando a padronização cadastral de bitolas e o bloqueio transacional de saldos negativos.
+          </p>
+          <h3>Objetivos Específicos</h3>
+          <ul class="topic-list">
+            <li>Modelar a hierarquia de classes com abstração, herança e polimorfismo.</li>
+            <li>Implementar sanitização estática numérica para bitolas em mm².</li>
+            <li>Criar travas transacionais na camada Model que impeçam saldo negativo.</li>
+            <li>Manter histórico de auditoria cronológico com precisão de segundos.</li>
+          </ul>
+        </div>
+        <div class="evidence-box" style="border-top-color: var(--secondary);">
+          <div class="evidence-tag blue">📐 Suíte de Modelagem: 5 Diagramas Oficiais</div>
+          <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12px;">
+            <a href="Diagramas/01_diagrama_de_arquitetura_mvc.pdf" target="_blank" class="diagram-pill-link">
+              <span>01. Arquitetura MVC (D01)</span> &rarr; Camadas Desacopladas (PDF)
+            </a>
+            <a href="Diagramas/02_diagrama_de_caso_de_uso.pdf" target="_blank" class="diagram-pill-link">
+              <span>02. Casos de Uso UML (D02)</span> &rarr; 10 Casos de Uso do Almoxarife (PDF)
+            </a>
+            <a href="Diagramas/03_diagrama_de_classes.pdf" target="_blank" class="diagram-pill-link">
+              <span>03. Classes UML (D03)</span> &rarr; Hierarquia ItemBase e Subclasses (PDF)
+            </a>
+            <a href="Diagramas/04_diagrama_de_sequencia.pdf" target="_blank" class="diagram-pill-link">
+              <span>04. Sequência UML (D04)</span> &rarr; Fluxos de Saída e Integridade (PDF)
+            </a>
+            <a href="Diagramas/05_diagrama_entidade_relacionamento.pdf" target="_blank" class="diagram-pill-link">
+              <span>05. Modelo DER MySQL (D05)</span> &rarr; PKs, FKs e Cardinalidades (PDF)
+            </a>
+          </div>
+          <div style="background: #F1F5F9; padding: 6px 10px; border-radius: 4px; font-size: 11.5px; color: #475569;">
+            <em>Rastreabilidade:</em> Todos os diagramas estão integrados aos testes de caixa-preta e ao código-fonte.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: ENGENHARIA DE REQUISITOS E REGRAS DE NEGÓCIO -->
+    <div class="slide-card" data-speaker="Lucas Castanheiro">
+      <div class="slide-header">
+        <h2>04. Engenharia de Requisitos e Regras de Negócio</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Castanheiro</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Requisitos Funcionais (Priorização MoSCoW)</h3>
+          <ul class="topic-list">
+            <li><strong>RF01 (Must):</strong> Painel consolidado com nome composto, saldo e total financeiro.</li>
+            <li><strong>RF02 / RF03 (Must):</strong> Gestão de categorias e bitolas com sanitização numérica.</li>
+            <li><strong>RF04 / RF05 (Must):</strong> Catálogo de produtos com trava de exclusão com saldo/histórico.</li>
+            <li><strong>RF06 / RF07 (Must):</strong> Entradas e Saídas com validação transacional estrita de estoque.</li>
+            <li><strong>RF08 / RF09 (Must/Should):</strong> Estorno operacional seguro e trilha de auditoria cronológica.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">✓ RNF Mensuráveis &amp; Regras de Negócio (RN)</div>
+          <div style="font-size: 12.5px; display: flex; flex-direction: column; gap: 5px;">
+            <p><strong>RNF01 (Desempenho):</strong> Tempo de resposta HTTP $\le 1,0$ s em 99% das requisições.</p>
+            <p><strong>RNF03 (Confiabilidade):</strong> 0 ocorrências de saldo negativo no repositório.</p>
+            <p><strong>RNF05 (Segurança):</strong> 100% de sanitização de saídas com <code>htmlspecialchars()</code>.</p>
+            <hr style="border: none; border-top: 1px dashed #CBD5E1;">
+            <p><strong>RN01 — Trava de Saída:</strong> Aborta saída se quantidade requerida for maior que o saldo.</p>
+            <p><strong>RN02/RN03 — Bitola:</strong> Ponto decimal obrigatório (rejeita vírgula) e unicidade léxica.</p>
+            <p><strong>RN04/RN05 — Integridade:</strong> Simulação de <em>ON DELETE RESTRICT</em> em categorias e bitolas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ARQUITETURA MVC E CASOS DE USO UML (COM DIAGRAMAS D01 E D02) -->
+    <div class="slide-card" data-speaker="Lucas Castanheiro">
+      <div class="slide-header">
+        <h2>05. Arquitetura MVC e Casos de Uso UML</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Castanheiro</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Padrão Arquitetural MVC em PHP 8</h3>
+          <ul class="topic-list">
+            <li><strong>Front Controller (<code>index.php</code>):</strong> Ponto único de entrada, roteamento e despacho centralizado.</li>
+            <li><strong>Controller (<code>EstoqueController.php</code>):</strong> Orquestra fluxos GET/POST, sanitiza e aciona o repositório.</li>
+            <li><strong>Model (<code>Repositorio.php</code>):</strong> Centraliza regras de integridade, coleções e persistência transacional.</li>
+            <li><strong>View (<code>views/*.php</code>):</strong> Telas PHP/HTML sanitizadas, focadas exclusivamente na renderização.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">📐 Diagramas Oficiais de Referência</div>
+          
+          <!-- Visual MVC Representation -->
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>Diagrama 01 &bull; Arquitetura MVC em Camadas</span>
+              <a href="Diagramas/01_diagrama_de_arquitetura_mvc.pdf" target="_blank" class="diagram-pill-link">Abrir PDF ↗</a>
+            </div>
+            <div style="font-size: 11px; font-family: Consolas, monospace; background: white; padding: 6px; border-radius: 4px; border: 1px solid #CBD5E1; color: #1E293B;">
+              <strong>[Navegador]</strong> &rarr; <code>index.php</code> (Front Controller)<br>
+              &nbsp;&nbsp;&darr; despacha requisições GET/POST<br>
+              <strong>[Controller]</strong> <code>EstoqueController::processarAcao()</code><br>
+              &nbsp;&nbsp;&darr; aciona operações e regras de negócio<br>
+              <strong>[Model]</strong> <code>Repositorio.php</code> &harr; <em>Entidades POO &amp; MySQL</em><br>
+              &nbsp;&nbsp;&darr; injeta dados sanitizados na tela<br>
+              <strong>[Views]</strong> <code>views/estoque.php</code>, <code>views/movimentacoes.php</code>
+            </div>
+          </div>
+
+          <!-- Visual Use Cases Representation -->
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>Diagrama 02 &bull; 10 Casos de Uso (Ator: Almoxarife)</span>
+              <a href="Diagramas/02_diagrama_de_caso_de_uso.pdf" target="_blank" class="diagram-pill-link">Abrir PDF ↗</a>
+            </div>
+            <div style="font-size: 11px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; color: #334155;">
+              <div>&bull; <strong>UC01:</strong> Painel de Estoque</div>
+              <div>&bull; <strong>UC02/03:</strong> Categorias (CRUD)</div>
+              <div>&bull; <strong>UC04/05:</strong> Bitolas em mm²</div>
+              <div>&bull; <strong>UC06/07:</strong> Produtos (Trava Saldo)</div>
+              <div>&bull; <strong>UC08:</strong> Entrada de Material</div>
+              <div>&bull; <strong style="color: #2563EB;">UC09:</strong> Saída (Valida Saldo)</div>
+              <div style="grid-column: span 2;">&bull; <strong>UC10:</strong> Trilha de Auditoria Cronológica</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: POO - ABSTRAÇÃO E HERANÇA (DIAGRAMA D03 + CÓDIGO) -->
+    <div class="slide-card" data-speaker="Lucas Piva">
+      <div class="slide-header">
+        <h2>06. Evidências de POO: Abstração e Herança</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Piva</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Aplicação Prática no Domínio</h3>
+          <ul class="topic-list">
+            <li><span class="concept-badge">ABSTRAÇÃO</span> <strong>Superclasse <code>ItemBase</code>:</strong> Define atributos comuns a qualquer entidade do galpão (ID e Nome protegidos) e impõe contrato com método abstrato.</li>
+            <li><span class="concept-badge">HERANÇA</span> <strong>Subclasses Especializadas:</strong> <code>Categoria</code>, <code>SecaoNominal</code> e <code>Produto</code> estendem <code>ItemBase</code> via <code>extends ItemBase</code>.</li>
+            <li><strong>Reuso de Código:</strong> O construtor filho invoca <code>parent::__construct($id, $nome)</code>, reaproveitando a inicialização da superclasse.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">
+            <span>📐 Diagrama 03 (Classes UML) &amp; 💻 Código-Fonte</span>
+            <a href="Diagramas/03_diagrama_de_classes.pdf" target="_blank" class="diagram-pill-link" style="margin-left: auto;">Ver D03 (PDF) ↗</a>
+          </div>
+
+          <!-- UML Model Extract -->
+          <div class="uml-box">
+            <div class="uml-header abstract">&laquo;abstract&raquo; ItemBase</div>
+            <div class="uml-content">
+              # int id<br>
+              # string nome
+              <hr>
+              + __construct(id, nome)<br>
+              + <strong>exibirDetalhes()* : string</strong> &nbsp;<em>(Contrato Abstrato)</em>
+            </div>
+          </div>
+          <div style="text-align: center; font-size: 11px; color: #2563EB; font-weight: bold;">
+            &uarr; Herança: <code>Categoria extends ItemBase</code> &uarr;
+          </div>
+
+          <!-- Real Code PHP -->
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">ItemBase.php &bull; Classe Abstrata:</div>
+          <div class="code-box"><span class="kw">abstract class</span> <span class="fn">ItemBase</span> {
+    <span class="kw">protected</span> <span class="var">$id</span>;
+    <span class="kw">protected</span> <span class="var">$nome</span>;
+
+    <span class="kw">public function</span> <span class="fn">__construct</span>(<span class="var">$id</span>, <span class="var">$nome</span>) {
+        <span class="var">$this</span>->id = <span class="var">$id</span>;
+        <span class="var">$this</span>->nome = <span class="var">$nome</span>;
+    }
+
+    <span class="com">// Contrato obrigatório para subclasses:</span>
+    <span class="kw">abstract public function</span> <span class="fn">exibirDetalhes</span>();
+}</div>
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">Categoria.php &bull; Herança com parent::__construct():</div>
+          <div class="code-box"><span class="kw">class</span> <span class="fn">Categoria</span> <span class="kw">extends</span> <span class="fn">ItemBase</span> {
+    <span class="kw">private</span> <span class="var">$descricao</span>;
+
+    <span class="kw">public function</span> <span class="fn">__construct</span>(<span class="var">$id</span>, <span class="var">$nome</span>, <span class="var">$descricao</span>) {
+        <span class="kw">parent</span>::<span class="fn">__construct</span>(<span class="var">$id</span>, <span class="var">$nome</span>); <span class="com">// Reuso da superclasse</span>
+        <span class="var">$this</span>->descricao = <span class="var">$descricao</span>;
+    }
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: POO - POLIMORFISMO, ENCAPSULAMENTO E MÉTODO ESTÁTICO -->
+    <div class="slide-card" data-speaker="Lucas Piva">
+      <div class="slide-header">
+        <h2>07. Evidências de POO: Polimorfismo e Encapsulamento</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Piva</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Mecanismos de Segurança e Reuso</h3>
+          <ul class="topic-list">
+            <li><span class="concept-badge green">POLIMORFISMO</span> <strong>Sobrescrita de <code>exibirDetalhes()</code>:</strong> Cada classe filha implementa sua própria apresentação conforme modelado no Diagrama de Classes.</li>
+            <li><span class="concept-badge green">ENCAPSULAMENTO</span> <strong>Invariante de Negócio:</strong> Atributos protegidos/privados e manipulação controlada pelo setter <code>setQuantidade()</code>.</li>
+            <li><span class="concept-badge green">MÉTODO ESTÁTICO</span> <strong>Utilitário <code>SecaoNominal::formatarValor()</code>:</strong> Normaliza <code>4.0</code> para <code>4</code> sem necessidade de instanciar a classe.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">
+            <span>📐 Diagrama 03 (Operações UML) &amp; 💻 Código Real</span>
+            <a href="Diagramas/03_diagrama_de_classes.pdf" target="_blank" class="diagram-pill-link" style="margin-left: auto;">Ver D03 (PDF) ↗</a>
+          </div>
+
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>Assinaturas Modeladas no Diagrama de Classes</span>
+            </div>
+            <div style="font-size: 11px; font-family: Consolas, monospace; color: #334155;">
+              &bull; <code>Categoria::+exibirDetalhes() : string</code><br>
+              &bull; <code>Produto::+exibirDetalhes() : string</code><br>
+              &bull; <code>SecaoNominal::+formatarValor(valor)$ : string</code> &nbsp;<em>(Operação Estática)</em><br>
+              &bull; <code>Produto::-quantidade : int</code> com <code>+setQuantidade(qtd)</code>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">Polimorfismo em Tempo de Execução:</div>
+          <div class="code-box"><span class="com">// Categoria.php:</span>
+<span class="kw">public function</span> <span class="fn">exibirDetalhes</span>() {
+    <span class="kw">return</span> <span class="str">"Categoria: "</span> . <span class="var">$this</span>->nome . <span class="str">" - "</span> . <span class="var">$this</span>->descricao;
+}
+
+<span class="com">// Produto.php:</span>
+<span class="kw">public function</span> <span class="fn">exibirDetalhes</span>() {
+    <span class="kw">return</span> <span class="str">"Material: "</span> . <span class="var">$this</span>->nome . <span class="str">" | Saldo: "</span> . <span class="var">$this</span>->quantidade;
+}</div>
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">Encapsulamento com Invariante (Produto.php):</div>
+          <div class="code-box"><span class="kw">public function</span> <span class="fn">setQuantidade</span>(<span class="var">$quantidade</span>) {
+    <span class="com">// Invariante matemática: impossível saldo negativo</span>
+    <span class="var">$this</span>->quantidade = <span class="fn">max</span>(0, (<span class="kw">int</span>)<span class="var">$quantidade</span>);
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: PERSISTÊNCIA PDO TRANSACIONAL E DER (DIAGRAMA D05 + CÓDIGO) -->
+    <div class="slide-card" data-speaker="Lucas Piva">
+      <div class="slide-header">
+        <h2>08. Persistência de Dados e Transações PDO (Banco II)</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Piva</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Modelo Relacional e Transacionalidade</h3>
+          <ul class="topic-list">
+            <li><strong>CATEGORIAS (1:N) &rarr; PRODUTOS:</strong> Associação obrigatória de agrupamento.</li>
+            <li><strong>SECOES_NOMINAIS (0..1:N) &rarr; PRODUTOS:</strong> Chave opcional (<em>nullable</em>), atendendo à realidade de disjuntores e sensores sem bitola.</li>
+            <li><strong>PRODUTOS (1:N) &rarr; MOVIMENTACOES:</strong> Trilha de auditoria por item movimentado.</li>
+            <li><strong>Transações ACID no MySQL:</strong> Garantia de consistência contra concorrência via bloqueio <code>FOR UPDATE</code>.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">
+            <span>📐 Diagrama 05 (DER Relacional) &amp; 💻 PDO Transacional</span>
+            <a href="Diagramas/05_diagrama_entidade_relacionamento.pdf" target="_blank" class="diagram-pill-link" style="margin-left: auto;">Ver D05 (PDF) ↗</a>
+          </div>
+
+          <!-- DER Visual Card -->
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>Estrutura do Modelo Relacional MySQL (DER)</span>
+            </div>
+            <div style="font-size: 11px; font-family: Consolas, monospace; color: #1E293B;">
+              <strong>CATEGORIAS</strong> [PK: id] &mdash;&mdash;&lt; (1:N) &gt;&mdash;&mdash; <strong>PRODUTOS</strong> [FK: id_categoria]<br>
+              <strong>SECOES_NOMINAIS</strong> [PK: id] &mdash;&lt; (0..1:N) &gt;&mdash; <strong>PRODUTOS</strong> [FK: id_secao_nominal (NULL)]<br>
+              <strong>PRODUTOS</strong> [PK: id] &mdash;&mdash;&mdash;&lt; (1:N) &gt;&mdash;&mdash;&mdash; <strong>MOVIMENTACOES</strong> [FK: id_produto]
+            </div>
+          </div>
+
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">Repositorio.php &bull; Transação Atômica com Bloqueio FOR UPDATE:</div>
+          <div class="code-box"><span class="var">$this</span>->db-><span class="fn">beginTransaction</span>(); <span class="com">// Início da transação atômica ACID</span>
+<span class="kw">try</span> {
+    <span class="com">// Bloqueia linha para evitar concorrência simultânea no balcão:</span>
+    <span class="var">$stmt</span> = <span class="var">$this</span>->db-><span class="fn">prepare</span>(
+        <span class="str">"SELECT QUANTIDADE FROM PRODUTO WHERE ID = :id FOR UPDATE"</span>
+    );
+    <span class="var">$stmt</span>-><span class="fn">execute</span>([<span class="str">':id'</span> => <span class="var">$id</span>]);
+    <span class="com">// (...) validação de saldo e movimentação</span>
+    <span class="var">$this</span>->db-><span class="fn">commit</span>(); <span class="com">// Confirma operação segura</span>
+    <span class="kw">return true</span>;
+} <span class="kw">catch</span> (<span class="fn">Exception</span> <span class="var">$e</span>) {
+    <span class="var">$this</span>->db-><span class="fn">rollBack</span>(); <span class="com">// Desfaz em caso de falha</span>
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: EVIDÊNCIA PRÁTICA I: BITOLAS E INTEGRIDADE (DIAGRAMA DE SEQUÊNCIA 2) -->
+    <div class="slide-card" data-speaker="Bruno Furlan">
+      <div class="slide-header">
+        <h2>09. Evidência Prática I: Bitolas e ON DELETE RESTRICT</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Bruno Furlan</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Testes de Caixa-Preta no Sistema</h3>
+          <ul class="topic-list">
+            <li><strong>Teste 1 (Rejeição de Vírgula):</strong> Digitação de <code>2,5</code> &rarr; Bloqueio imediato com alerta educativo.</li>
+            <li><strong>Teste 2 (Simplificação de Inteiros):</strong> Digitação de <code>4.0</code> &rarr; Normalização para <code>4 mm²</code>.</li>
+            <li><strong>Teste 3 (Anti-Duplicidade):</strong> Impede salvar duas seções <code>2.5 mm²</code> idênticas.</li>
+            <li><strong>Teste 4 (Integridade Referencial):</strong> Simulação de <em>ON DELETE RESTRICT</em> impedindo registros órfãos.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">
+            <span>📐 Diagrama de Sequência 2 &amp; 💻 Código de Integridade</span>
+            <a href="Diagramas/04_diagrama_de_sequencia_2.pdf" target="_blank" class="diagram-pill-link" style="margin-left: auto;">Ver D04 - Seq. 2 (PDF) ↗</a>
+          </div>
+
+          <!-- Sequence Diagram 2 Trace -->
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>DS02 &bull; Fluxo de Exclusão com ON DELETE RESTRICT</span>
+            </div>
+            <div class="seq-step-flow">
+              <div class="seq-step-row"><span class="seq-num">1</span> Almoxarife clica 'Excluir Categoria (ID=1)'</div>
+              <div class="seq-step-row"><span class="seq-num">2</span> <code>EstoqueController</code> &rarr; chama <code>Repositorio::excluirCategoria(1)</code></div>
+              <div class="seq-step-row"><span class="seq-num">3</span> Repositorio executa checagem de produtos vinculados na categoria</div>
+              <div class="seq-step-row" style="background: #FEE2E2; color: #991B1B;"><span class="seq-num err">alt</span> <strong>[Produtos Vinculados Encontrados]</strong> &rarr; Aborta exclusão e retorna erro</div>
+            </div>
+          </div>
+
+          <div class="code-box"><span class="kw">public function</span> <span class="fn">excluirCategoria</span>(<span class="var">$idCategoria</span>) {
+    <span class="com">// Simula ON DELETE RESTRICT verificando produtos ativos:</span>
+    <span class="var">$stmtCheck</span> = <span class="var">$this</span>->db-><span class="fn">prepare</span>(
+        <span class="str">"SELECT NOME FROM PRODUTO WHERE ID_CATEGORIA = :id LIMIT 1"</span>
+    );
+    <span class="var">$stmtCheck</span>-><span class="fn">execute</span>([<span class="str">':id'</span> => (int)<span class="var">$idCategoria</span>]);
+    <span class="kw">if</span> (<span class="var">$prod</span> = <span class="var">$stmtCheck</span>-><span class="fn">fetch</span>()) {
+        <span class="kw">return</span> <span class="str">"Não é possível excluir a categoria pois há materiais cadastrados nela (ex: '{$prod['NOME']}')."</span>;
+    }
+}</div>
+          <div class="alert-demo red">
+            <strong>Alerta Visual Renderizado na View:</strong><br>
+            <em>"Não é possível excluir a categoria pois há materiais cadastrados nela (ex: 'Cabo Flexível 750V 2.5mm²')!"</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: EVIDÊNCIA PRÁTICA II: TRAVA DE SALDO NEGATIVO (DIAGRAMA DE SEQUÊNCIA 1) -->
+    <div class="slide-card" data-speaker="Higor Kleemann">
+      <div class="slide-header">
+        <h2>10. Evidência Prática II: Trava de Saldo Negativo e Estorno</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Higor Kleemann</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Validação Transacional de Movimentação</h3>
+          <ul class="topic-list">
+            <li><strong>Filtro Preditivo em JS:</strong> Busca incremental enquanto o almoxarife digita, acelerando o atendimento no balcão.</li>
+            <li><strong>Cenário de Limite:</strong> Cabo com <strong>saldo de 15 un.</strong> &rarr; Tentativa de retirar <strong>18 un.</strong></li>
+            <li><strong>Estorno Operacional Seguro:</strong> Reversão de saída recompõe o saldo; estorno de entrada só é autorizado se o saldo restante for $\ge 0$.</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">
+            <span>📐 Diagrama de Sequência 1 &amp; 💻 Código de Trava</span>
+            <a href="Diagramas/04_diagrama_de_sequencia.pdf" target="_blank" class="diagram-pill-link" style="margin-left: auto;">Ver D04 - Seq. 1 (PDF) ↗</a>
+          </div>
+
+          <!-- Sequence Diagram 1 Trace -->
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>DS01 &bull; Saída com Validação e Bloqueio de Saldo</span>
+            </div>
+            <div class="seq-step-flow">
+              <div class="seq-step-row"><span class="seq-num">1</span> Formulário envia: <code>Produto ID=1, Tipo='SAIDA', Qtd=18</code></div>
+              <div class="seq-step-row"><span class="seq-num">2</span> <code>Repositorio</code> consulta saldo atual (15 un.) via <code>FOR UPDATE</code></div>
+              <div class="seq-step-row" style="background: #FEE2E2; color: #991B1B;"><span class="seq-num err">alt</span> <strong>[saldoAtual (15) &lt; quantidade (18)]</strong> &rarr; Executa <code>rollBack()</code></div>
+              <div class="seq-step-row"><span class="seq-num">3</span> Controller grava <code>$_SESSION['mensagem_erro']</code> e renderiza alerta</div>
+            </div>
+          </div>
+
+          <div class="code-box"><span class="com">// Regra de Ouro: bloqueio transacional de saldo insuficiente</span>
+<span class="kw">if</span> (<span class="var">$tipo</span> === <span class="str">'SAIDA'</span> &amp;&amp; <span class="var">$saldoAtual</span> &lt; <span class="var">$qtd</span>) {
+    <span class="var">$this</span>->db-><span class="fn">rollBack</span>(); <span class="com">// Desfaz a transação na hora</span>
+    <span class="kw">return</span> <span class="str">"Saldo insuficiente! Saldo atual: {$saldoAtual} un."</span>;
+}</div>
+          <div class="alert-demo red">
+            <strong>Alerta Visual Renderizado na View:</strong><br>
+            <em>"Erro: Saldo insuficiente! Saldo atual: 15 un."</em>
+          </div>
+          <div class="alert-demo green" style="font-size: 11.5px; font-weight: bold;">
+            Resultado Testado: 0 ocorrências de saldo negativo no banco de dados.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: EVIDÊNCIA PRÁTICA III: PAINEL CONSOLIDADO E AUDITORIA -->
+    <div class="slide-card" data-speaker="Lucas Castanheiro">
+      <div class="slide-header">
+        <h2>11. Evidência Prática III: Painel Consolidado e Auditoria</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Lucas Castanheiro</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="topic-box">
+          <h3>Visão Gerencial e Rastreabilidade Total</h3>
+          <ul class="topic-list">
+            <li><strong>Nome Composto Dinâmico:</strong> Junção automática de <code>[Produto] + [Bitola em mm²]</code> via método <code>getNomeExibicao()</code>.</li>
+            <li><strong>Valoração Financeira:</strong> Multiplicação automática de Saldo &times; Preço Unitário para controle de capital imobilizado.</li>
+            <li><strong>Trilha de Auditoria Geral:</strong> Histórico decrescente com carimbo de tempo completo: <code>dia/mês/ano hora:minuto:segundo</code>.</li>
+            <li><strong>Compliance Operacional:</strong> Justificativa formal gravada em cada saída (obra, instalação de painel, NF de compra).</li>
+          </ul>
+        </div>
+        <div class="evidence-box">
+          <div class="evidence-tag">📐 Consistência Inter-Modelos (Classes, DER &amp; Views)</div>
+          
+          <div class="diagram-visual-card">
+            <div class="diagram-visual-title">
+              <span>Mapeamento Inter-Modelos do EletroStock</span>
+            </div>
+            <div style="font-size: 11px; color: #334155; line-height: 1.4;">
+              &bull; <strong>Diagrama de Classes (D03):</strong> <code>Produto::getNomeExibicao()</code> monta o nome comercial.<br>
+              &bull; <strong>Diagrama DER (D05):</strong> Tabela <code>MOVIMENTACOES</code> com FK <code>id_produto</code> e campo <code>data_hora</code>.<br>
+              &bull; <strong>Casos de Uso (D02):</strong> <code>UC01</code> (Painel) e <code>UC10</code> (Histórico) totalmente consistentes.
+            </div>
+          </div>
+
+          <div style="font-size: 11px; font-weight: bold; color: #64748B;">Código de Auditoria (NOW() do MySQL):</div>
+          <div class="code-box"><span class="var">$stmtMov</span> = <span class="var">$this</span>->db-><span class="fn">prepare</span>(
+    <span class="str">"INSERT INTO MOVIMENTACAO 
+     (ID_PRODUTO, TIPO, QUANTIDADE, MOTIVO, DATA_HORA) 
+     VALUES (:id_prod, :tipo, :qtd, :motivo, NOW())"</span>
+);</div>
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 8px; border-radius: 6px; font-size: 12px; color: #1E293B;">
+            <strong>Exemplo de Linha Auditada:</strong><br>
+            <code>12/11/2026 10:14:32</code> &bull; <span class="concept-badge red">SAÍDA</span> &bull; Cabo Flexível 750V 2.5mm² &bull; <strong>10 un.</strong> &bull; <em>"Alimentação do Quadro QGBT - Obra Residencial"</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: RESULTADOS, LIMITAÇÕES E CONCLUSÃO -->
+    <div class="slide-card" data-speaker="Equipe (Bruno Furlan)">
+      <div class="slide-header">
+        <h2>12. Resultados Alcançados, Limitações e Conclusão</h2>
+        <div class="meta-pills">
+          <span class="pill-speaker">Equipe / Bruno</span>
+        </div>
+      </div>
+      <div class="slide-body full-width">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+          <div class="evidence-box" style="border-top-color: var(--secondary);">
+            <div class="evidence-tag" style="color: var(--secondary);">Programação II (100% OK)</div>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #334155;">
+              <p>✔ <strong>Abstração:</strong> <code>ItemBase</code> abstrata com contrato.</p>
+              <p>✔ <strong>Herança:</strong> <code>extends ItemBase</code> com reuso pai.</p>
+              <p>✔ <strong>Polimorfismo:</strong> <code>exibirDetalhes()</code> especializado.</p>
+              <p>✔ <strong>Encapsulamento:</strong> Invariante <code>max(0, ...)</code>.</p>
+              <p>✔ <strong>Método Estático:</strong> <code>formatarValor()</code>.</p>
+              <p>✔ <strong>Diagrama D03:</strong> Classes UML 100% fiel ao código.</p>
+            </div>
+          </div>
+          <div class="evidence-box" style="border-top-color: var(--primary);">
+            <div class="evidence-tag" style="color: var(--primary);">Engenharia de Software (100% OK)</div>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #334155;">
+              <p>✔ 2 técnicas empíricas com dados reais de campo.</p>
+              <p>✔ 3 Personas fundamentadas em entrevistas.</p>
+              <p>✔ Requisitos MoSCoW e histórias de usuário.</p>
+              <p>✔ <strong>Diagramas D01, D02, D04:</strong> MVC, Casos de Uso e Sequência de Exceção.</p>
+              <p>✔ Rastreabilidade bidirecional sem lacunas.</p>
+            </div>
+          </div>
+          <div class="evidence-box" style="border-top-color: var(--success);">
+            <div class="evidence-tag" style="color: var(--success);">Banco de Dados II &amp; Futuro</div>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #334155;">
+              <p>✔ <strong>Diagrama D05:</strong> DER relacional com cardinalidade opcional.</p>
+              <p>✔ Transações ACID com <code>SELECT ... FOR UPDATE</code>.</p>
+              <p><strong>Limitação Atual:</strong> Ausência momentânea de login (RBAC).</p>
+              <p><strong>Roadmap Futuro:</strong></p>
+              <p>1. Login seguro com <code>password_hash()</code>.</p>
+              <p>2. Leitor óptico de Código de Barras / QR Code.</p>
+              <p>3. Exportação de termos de entrega em PDF.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 12px; background: white; border: 1px solid #CBD5E1; padding: 10px; border-radius: 8px;">
+          <h4 style="color: var(--primary); font-size: 16px;">Agradecemos aos Docentes Orientadores!</h4>
+          <p style="color: #64748B; font-size: 13px; margin: 3px 0;">
+            Prof. Me. Leandro Otavio Cordova Vieira &bull; Profª. Drª. Tatiele Bolson Moro
+          </p>
+          <span style="display: inline-block; background: #DBEAFE; color: #1E40AF; padding: 3px 14px; border-radius: 20px; font-weight: bold; font-size: 12.5px; margin-top: 4px;">
+            Aberto para Demonstração Prática do Sistema e Perguntas da Banca
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Presenter Notes Drawer -->
+  <div id="notes-drawer">
+    <h4>
+      <span>Notas do Apresentador &bull; Roteiro de Fala Integrado com Diagramas</span>
+      <span style="font-size: 11px; color: #94A3B8; text-transform: none;">Pressione [N] para fechar</span>
+    </h4>
+    <div id="notes-content"></div>
+  </div>
+
+  <!-- Modal de Diagramas Técnicos -->
+  <div id="diagrams-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>📐 Diagramas Técnicos Oficiais do Projeto EletroStock</h3>
+        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="diagram-item-row">
+          <div class="diagram-item-info">
+            <h4>01. Diagrama de Arquitetura MVC</h4>
+            <p>Engenharia de Software / Prog II &bull; Desacoplamento entre Front Controller, Controller, Repositorio e Views</p>
+          </div>
+          <a href="Diagramas/01_diagrama_de_arquitetura_mvc.pdf" target="_blank" class="btn-open-pdf">Abrir PDF ↗</a>
+        </div>
+
+        <div class="diagram-item-row">
+          <div class="diagram-item-info">
+            <h4>02. Diagrama de Casos de Uso UML</h4>
+            <p>Engenharia de Software I &bull; 10 Casos de Uso (UC01 a UC10) para o ator Almoxarife</p>
+          </div>
+          <a href="Diagramas/02_diagrama_de_caso_de_uso.pdf" target="_blank" class="btn-open-pdf">Abrir PDF ↗</a>
+        </div>
+
+        <div class="diagram-item-row">
+          <div class="diagram-item-info">
+            <h4>03. Diagrama de Classes UML</h4>
+            <p>Programação II &bull; Hierarquia ItemBase, subclasses especializadas, polimorfismo e método estático</p>
+          </div>
+          <a href="Diagramas/03_diagrama_de_classes.pdf" target="_blank" class="btn-open-pdf">Abrir PDF ↗</a>
+        </div>
+
+        <div class="diagram-item-row">
+          <div class="diagram-item-info">
+            <h4>04. Diagramas de Sequência (DS01 e DS02)</h4>
+            <p>Engenharia de Software I &bull; Modelagem dos fluxos de exceção: Trava de Saldo Negativo e ON DELETE RESTRICT</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <a href="Diagramas/04_diagrama_de_sequencia.pdf" target="_blank" class="btn-open-pdf" title="DS01 - Trava de Saldo Negativo">DS01 (Saldo) ↗</a>
+            <a href="Diagramas/04_diagrama_de_sequencia_2.pdf" target="_blank" class="btn-open-pdf" title="DS02 - Exclusão de Categoria com ON DELETE RESTRICT" style="background: #2563EB;">DS02 (Integridade) ↗</a>
+          </div>
+        </div>
+
+        <div class="diagram-item-row">
+          <div class="diagram-item-info">
+            <h4>05. Diagrama Entidade-Relacionamento (DER)</h4>
+            <p>Banco de Dados II &bull; Esquema relacional MySQL: PKs, FKs, cardinalidades 1:N e 0..1:N (bitola opcional)</p>
+          </div>
+          <a href="Diagramas/05_diagrama_entidade_relacionamento.pdf" target="_blank" class="btn-open-pdf">Abrir PDF ↗</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation & Controls Bar -->
+  <footer>
+    <div class="progress-info">
+      <span>Slide <strong id="cur-slide-num" style="color: #38BDF8;">1</strong> de <strong id="total-slide-num">14</strong></span>
+      <span style="color: #475569;">|</span>
+      <span id="cur-speaker" style="color: #94A3B8; font-size: 13px;">Bruno Furlan</span>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-action" id="btn-prev" disabled>&larr; Anterior</button>
+      <button class="btn-action" id="btn-next">Próximo &rarr;</button>
+    </div>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide-card');
+    const curSlideNumEl = document.getElementById('cur-slide-num');
+    const totalSlideNumEl = document.getElementById('total-slide-num');
+    const curSpeakerEl = document.getElementById('cur-speaker');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const notesDrawer = document.getElementById('notes-drawer');
+    const notesContent = document.getElementById('notes-content');
+
+    // Modal elements
+    const diagramsModal = document.getElementById('diagrams-modal');
+    const btnDiagramsTrigger = document.getElementById('btn-diagrams-trigger');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    let curIdx = 0;
+
+    // Regra: o número 13 é pulado diretamente para 14 (não exibindo o número 13)
+    function formatSlideNum(naturalNum) {
+      return naturalNum >= 13 ? naturalNum + 1 : naturalNum;
+    }
+
+    totalSlideNumEl.textContent = formatSlideNum(slides.length);
+
+    function renderSlide(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      curSlideNumEl.textContent = formatSlideNum(idx + 1);
+      
+      const s = slides[idx];
+      const speaker = s.getAttribute('data-speaker') || '';
+      const notes = s.getAttribute('data-notes') || 'Sem notas.';
+
+      curSpeakerEl.textContent = speaker;
+      notesContent.innerHTML = `<strong>Apresentador:</strong> ${speaker}<br><br>${notes}`;
+
+      btnPrev.disabled = (idx === 0);
+      btnNext.disabled = (idx === slides.length - 1);
+    }
+
+    btnPrev.addEventListener('click', () => {
+      if (curIdx > 0) {
+        curIdx--;
+        renderSlide(curIdx);
+      }
+    });
+
+    btnNext.addEventListener('click', () => {
+      if (curIdx < slides.length - 1) {
+        curIdx++;
+        renderSlide(curIdx);
+      }
+    });
+
+    function toggleNotes() {
+      notesDrawer.classList.toggle('open');
+    }
+
+    function toggleDiagramsModal() {
+      diagramsModal.classList.toggle('open');
+    }
+    if (btnDiagramsTrigger) btnDiagramsTrigger.addEventListener('click', toggleDiagramsModal);
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', toggleDiagramsModal);
+    diagramsModal.addEventListener('click', (e) => {
+      if (e.target === diagramsModal) {
+        toggleDiagramsModal();
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        if (curIdx < slides.length - 1) {
+          curIdx++;
+          renderSlide(curIdx);
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (curIdx > 0) {
+          curIdx--;
+          renderSlide(curIdx);
+        }
+      } else if (e.key.toLowerCase() === 'n') {
+        toggleNotes();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      } else if (e.key.toLowerCase() === 'd') {
+        toggleDiagramsModal();
+      } else if (e.key === 'Escape') {
+        if (diagramsModal.classList.contains('open')) {
+          diagramsModal.classList.remove('open');
+        }
+        if (notesDrawer.classList.contains('open')) {
+          notesDrawer.classList.remove('open');
+        }
+      }
+    });
+
+    // Start on first slide
+    renderSlide(0);
+  </script>
+</body>
+</html>
